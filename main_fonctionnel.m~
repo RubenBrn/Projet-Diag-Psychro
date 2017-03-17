@@ -29,6 +29,9 @@ T=linspace(Tmin, Tmax, 1000);
 nb_iso=20; %nombre de courbes iso par fenetre
 
 
+
+
+
 %% Trace de omega en fct de T
 
 
@@ -46,10 +49,10 @@ h_max=300;
 
 
 
-%% Tracer du diagramme psychrometrique
+%% Tracree du diagramme psychrometrique
 
 figure()
-
+hold all
 
 %creation d'un nouvel axe
 
