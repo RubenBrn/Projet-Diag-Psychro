@@ -131,13 +131,16 @@ title('Improved Example Figure');
 
 %% courbes isenthalpes 
 
+%stockage d'une pente pour tracer ensuite l'echelle transversale
+pente_ech_H=1/2500*1.826;
+Ech_h=pente_ech_H*(T+31); %droite d'echelle
+%axe enthalpie
+plot(T, Ech_h, '-b') %droite 
+
 for h=-4:50 %nombre de droites, intervalle d'enthalpies
     
-     %enthalpie de base, choisie au hasard
-    h=4.184*h;
-    iso_h=1/2500*((h)-1.826*T); %en valeur de omega
-    
-    %boucle pour tracer uniquement les bonnes valeurs 
+    h=4.184*h; %conversion dans la bonne unite
+    iso_h=1/2500*(h-1.826*T); %en valeur de omega
     k=1; %compteur pour trouver l'intersection entre Pv_sat et iso_h
     while iso_h(k)>courbe_sat(k)
         k=k+1;
@@ -145,23 +148,27 @@ for h=-4:50 %nombre de droites, intervalle d'enthalpies
     
     %on met la l?gende en ce point d'intersection
     h=h/4.184;
-    if mod(h,2)==0 && h<=38%seulement 1/2
+    if mod(h,2)==0%seulement 1/2
         
         
         str={h};
         text(T(k)-1,iso_h(k),str,'FontSize',10,'Color','blue','rotation',(h)/38*50)
-        text(T(k),iso_h(k),'x','FontSize',10,'Color','black','rotation',(h+10)/21*45)
-    end 
-    if mod(h,2)==0 && h>38 %seulement 1/2
-        
-        
-        str={h};
-        text(T(k)-1,iso_h(k),str,'FontSize',10,'Color','red','rotation',(h)/38*50)
-       
-    end 
+    end
 
     plot(T(1:k), iso_h(1:k), ':b')  
     plot(T(k:end), iso_h(k:end), '-b')  
+    
+    k=4; %compteur pour trouver l'intersection entre Pv_sat et iso_h
+    
+    while iso_h(k)>=Ech_h(k)
+        k=k+1;
+    end
+    text(T(k),Ech_h(k),'-','FontSize',10,'Color','blue','rotation',-45)
+    if mod(h,2)==0 %seulement 1/2 
+        str={h};
+        text(T(k-3),Ech_h(k-3),str,'FontSize',10,'Color','blue')
+    end
+    
 end
 
 % Trace des volumes specifiques
@@ -178,13 +185,6 @@ for vs=0.75:0.01:1
     plot(T(k:end),omega_vs(k:end),':red') 
     
 end
-
-%% axes droites isenthalpiques
-
-
-hax=axes; 
-SP=-15; %your point goes here 
-
 
 % Here we preserve the size of the image when we save it.
 % set(gcf,'InvertHardcopy','on');
