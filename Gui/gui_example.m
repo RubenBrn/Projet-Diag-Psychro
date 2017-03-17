@@ -42,3 +42,4 @@ freq =  get(src, 'Value');
 t = -1:1/(30*freq):1;
 sinusoide = sin(2*pi*freq*t);
 set(handles.plot(2), 'XData', t, 'YData', sinusoide);
+

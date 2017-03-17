@@ -34,3 +34,19 @@ xlim([-pi pi]);
 legend('f(x)', 'g(x)', 'f(x)=g(x)', 'Location', 'SouthEast');
 xlabel('x');
 title('Improved Example Figure');
+
+% Set Tick Marks
+set(gca,'XTick',-3:3);
+set(gca,'YTick',0:10);
+
+% Here we preserve the size of the image when we save it.
+set(gcf,'InvertHardcopy','on');
+set(gcf,'PaperUnits', 'inches');
+papersize = get(gcf, 'PaperSize');
+left = (papersize(1)- width)/2;
+bottom = (papersize(2)- height)/2;
+myfiguresize = [left, bottom, width, height];
+set(gcf,'PaperPosition', myfiguresize);
+
+% Save the file as PNG
+print('improvedExample','-dpng','-r300');

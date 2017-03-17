@@ -1,6 +1,3 @@
-clc
-clear all
-close all
 
 % Hypoth??ses :
 Ptot=101325; %Pa
@@ -24,9 +21,6 @@ title('Abaque psychrometrique simplifie')
 % pressions_partiellesPa=pressionpartielle_fomega(humidites_absolues,Ptot);
 % pressions_partielleskgcm2=pressions_partiellesPa.*1E-5;
 
-
-
-
 % %% voir td optimisation
 % [T,omega]=meshgrid(temperatures,humidites_absolues);
 % volume_spe=volume_specifique (T, pressions_partiellesPa, omega); 
@@ -40,7 +34,12 @@ Pvs_omega=0.622*(Pvs./(Ptot-Pvs));
 axes=gca;
 axes.YAxisLocation='right';
 
+%creation d'un nouvel axe
+
+
 figure(1)
+ax1 = axes('Position',[0.1 0.1 0.7 0.7]);
+ax2 = axes('Position',[0.65 0.65 0.28 0.28]);
 hold 
 ylim([0 0.05])
 for i=1:10
