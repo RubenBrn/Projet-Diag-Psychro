@@ -11,14 +11,14 @@ Mv= 18.01528E-3 ;
 % Variables
 Ptot=101325; %Pa
 
-Tmin=5;
-Tmax=40;
+Tmin=10;
+Tmax=20;
 T=linspace(Tmin,Tmax,100);
 
 nbe_iso=20; % 20 courbes de chaque type par niveau de zoom
 
 
-% Valeurs min et max pour chaque courbe dans la fenêtre qui va s'afficher
+% Valeurs min et max pour chaque courbe dans la fen??tre qui va s'afficher
 
 Pvs_min=pression_vapPa(Tmin);
 Pvs_max=pression_vapPa(Tmax);
@@ -42,7 +42,7 @@ h_max=300;
 
 
 
-%% Tracé du diagramme psychrométrique
+%% Trac?? du diagramme psychrom??trique
 
 figure()
 hold all
@@ -50,12 +50,12 @@ hold all
 
 %%%%%%%%%%%%%%%%%%%%%%%% Mise en forme  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-xlabel('T en °C')
+xlabel('T en ??C')
 ylabel('omega en kg/kg')
 
 ylim([0 0.04])
 
-% Positionnement de l'axe des ordonées à droite
+% Positionnement de l'axe des ordon??es ?? droite
 axes=gca;
 axes.YAxisLocation='right'
 
@@ -63,7 +63,7 @@ axes.YAxisLocation='right'
 
 
 
-%%%%%%%%%%%%%%%%%%%% Tracé de la courbe de saturation %%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% Trac?? de la courbe de saturation %%%%%%%%%%%%%%%%%%%%
 
 Pvs=pression_vapPa(T);
 courbe_sat=0.622.*(Pvs./(Ptot-Pvs));
@@ -72,17 +72,17 @@ for j=0:0.2:1
     plot(T,j*courbe_sat,'k')
 end
 
-% Comment mettre nbe_iso courbes dans la fenêtre????????????????????
+% Comment mettre nbe_iso courbes dans la fen??tre????????????????????
 
 
-%%%%%%%%%%%%%%%%%%% Tracé des iso-volume spécifique %%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%% Trac?? des iso-volume sp??cifique %%%%%%%%%%%%%%%%%%%%%%
 
 vs=linspace(vs_min,vs_max,nbe_iso);
 
 for c=1:length(vs)
    omega_vs=(vs(c).*Ptot.*Mv)./(R.*(T+273.15)) -(Mv/Mas); 
    
-   %boucles pour faire le tracé uniquement sous la courbe de saturation
+   %boucles pour faire le trac?? uniquement sous la courbe de saturation
    k=1; 
    while omega_vs(k)>courbe_sat(k) 
         k=k+1;
@@ -97,17 +97,17 @@ for c=1:length(vs)
    plot(T(k:i),omega_vs(k:i),'r')
    
 end
-legend('volume spécifique en m^3/kg') %% problème
+legend('volume sp??cifique en m^3/kg') %% probl??me
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%% Tracé des isenthalpes %%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%% Trac?? des isenthalpes %%%%%%%%%%%%%%%%%%%%%%%%%
 
 h=linspace(h_min,h_max,nbe_iso);
 
 for d=1:length(h)
     iso_h=1/2500*((h(d))-1.826*T); 
    
-   %boucles pour faire le tracé uniquement sous la courbe de saturation
+   %boucles pour faire le trac?? uniquement sous la courbe de saturation
    a=1; 
    while iso_h(a)>courbe_sat(a) 
         a=a+1;
