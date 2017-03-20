@@ -205,5 +205,5 @@ end
 % 
 % % Save the file as PNG
 % % r300 correspond a la definition
-% print('improvedExample','-dpng','-r100');
+% print('Diagramme','-dpng','-r100');
 
