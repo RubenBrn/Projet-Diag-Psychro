@@ -50,10 +50,7 @@ h_max=300;
 
 figure()
 
-
-%creation d'un nouvel axe
-
-%% Passer la figure en HD 
+%% En HD 
 width = 16.5;     % Width in inches
 height = 23.4;    % Height in inches
 alw = 0.75;    % AxesLineWidth
@@ -68,13 +65,14 @@ msz = 8;       % MarkerSize
 
 
 hold 
- pos = get(gcf, 'Position');
- set(gcf, 'Position', [pos(1) pos(2) width*100, height*100]); %<- Set size
-% set(gca, 'FontSize', fsz, 'LineWidth', alw); %<- Set properties
+
+pos = get(gcf, 'Position');
+set(gcf, 'Position', [pos(1) pos(2) width*100, height*100]); % choix de la taille de l'image
+set(gca, 'FontSize', fsz, 'LineWidth', alw,'Box','off'); %,'XTick',T(1:(1000/65):end-2)); %<- Set properties, choix notamment des graduations abscisses
 
 title('Abaque psychrometrique simplifie')
 
-xlabel('T en ??C')
+xlabel('T en ?C')
 ylabel('omega en kg/kg')
 
 xlim([Tmin Tmax])
@@ -146,9 +144,9 @@ for h=-4:60 %nombre de droites, intervalle d'enthalpies
         k=k+1;
     end
     
-    
     h=h/4.184;
-    plot(T(1:k), iso_h(1:k), ':b')  
+    markerstep=2; %pour espacer les points 
+    plot(T(1:markerstep:k), iso_h(1:markerstep:k),'.b','MarkerSize',0.1)  
     plot(T(k:end), iso_h(k:end), '-b') 
     
     
@@ -179,8 +177,8 @@ for h=-4:60 %nombre de droites, intervalle d'enthalpies
     
 end
 
-% Trace des volumes specifiques
 
+%% Trace des volumes specifiques
 for vs=0.75:0.01:1
     omega_vs=(vs.*Ptot.* Mv)./(R.*(T+273.15)) -( Mv /Mas); 
     k=1; %compteur 
@@ -194,7 +192,9 @@ for vs=0.75:0.01:1
     
 end
 
-% Here we preserve the size of the image when we save it.
+
+%% A enlever du mode commentaire pour sauvergarder l'image
+% %Here we preserve the size of the image when we save it.
 % set(gcf,'InvertHardcopy','on');
 %     set(gcf,'PaperUnits', 'inches');
 %     papersize = get(gcf, 'PaperSize');
@@ -205,5 +205,5 @@ end
 % 
 % % Save the file as PNG
 % % r300 correspond a la definition
-% print('improvedExample','-dpng','-r500');
+% print('improvedExample','-dpng','-r100');
 
