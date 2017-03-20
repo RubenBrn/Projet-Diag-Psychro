@@ -54,8 +54,8 @@ figure()
 %creation d'un nouvel axe
 
 %% Passer la figure en HD 
-width = 5;     % Width in inches
-height = 7;    % Height in inches
+width = 16.5;     % Width in inches
+height = 23.4;    % Height in inches
 alw = 0.75;    % AxesLineWidth
 fsz = 11;      % Fontsize
 lw = 1.5;      % LineWidth
@@ -137,7 +137,7 @@ Ech_h=pente_ech_H*(T+31); %droite d'echelle
 %axe enthalpie
 plot(T, Ech_h, '-b') %droite 
 
-for h=-4:50 %nombre de droites, intervalle d'enthalpies
+for h=-4:60 %nombre de droites, intervalle d'enthalpies
     
     h=4.184*h; %conversion dans la bonne unite
     iso_h=1/2500*(h-1.826*T); %en valeur de omega
@@ -146,27 +146,35 @@ for h=-4:50 %nombre de droites, intervalle d'enthalpies
         k=k+1;
     end
     
-    %on met la l?gende en ce point d'intersection
+    
     h=h/4.184;
-    if mod(h,2)==0%seulement 1/2
-        
-        
-        str={h};
-        text(T(k)-1,iso_h(k),str,'FontSize',10,'Color','blue','rotation',(h)/38*50)
-    end
-
     plot(T(1:k), iso_h(1:k), ':b')  
-    plot(T(k:end), iso_h(k:end), '-b')  
+    plot(T(k:end), iso_h(k:end), '-b') 
     
-    k=4; %compteur pour trouver l'intersection entre Pv_sat et iso_h
     
-    while iso_h(k)>=Ech_h(k)
-        k=k+1;
-    end
-    text(T(k),Ech_h(k),'-','FontSize',10,'Color','blue','rotation',-45)
-    if mod(h,2)==0 %seulement 1/2 
-        str={h};
-        text(T(k-3),Ech_h(k-3),str,'FontSize',10,'Color','blue')
+    %gestion de la legende 
+    %on met la legende au point d'intersection entre courbes Pvsat et isenthapiques
+    if h<=55 
+        if mod(h,2)==0%seulement 1/2
+
+
+            str={h};
+            text(T(k)-1,iso_h(k),str,'FontSize',10,'Color','blue','rotation',(h)/38*50)
+        end
+        
+        %creation de l'echelle en diagonale
+        k=1;
+        while iso_h(k)>=Ech_h(k)
+            k=k+1;
+        end
+        text(T(k),Ech_h(k),'-','FontSize',10,'Color','blue','rotation',-45)
+        if h>=0 && h<49
+            str={h};
+            text(T(k)+0.5,Ech_h(k)+0.001,str,'FontSize',10,'Color','blue','rotation',56)
+        	if h==26
+                text(T(k)+0.5,Ech_h(k)+0.002,'h en kcal/kg','FontSize',12,'Color','blue','rotation',56)
+            end 
+        end
     end
     
 end
@@ -188,14 +196,14 @@ end
 
 % Here we preserve the size of the image when we save it.
 % set(gcf,'InvertHardcopy','on');
-    % set(gcf,'PaperUnits', 'inches');
-    % papersize = get(gcf, 'PaperSize');
-    % left = (papersize(1)- width)/2;
-    % bottom = (papersize(2)- height)/2;
-    % myfiguresize = [left, bottom, width, height];
-    % set(gcf,'PaperPosition', myfiguresize);
-
-% Save the file as PNG
-%r300 correspond a la definition
-%print('improvedExample','-dpng','-r300');
+%     set(gcf,'PaperUnits', 'inches');
+%     papersize = get(gcf, 'PaperSize');
+%     left = (papersize(1)- width)/2;
+%     bottom = (papersize(2)- height)/2;
+%     myfiguresize = [left, bottom, width, height];
+%     set(gcf,'PaperPosition', myfiguresize);
+% 
+% % Save the file as PNG
+% % r300 correspond a la definition
+% print('improvedExample','-dpng','-r500');
 
