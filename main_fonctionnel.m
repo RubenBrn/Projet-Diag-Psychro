@@ -193,17 +193,17 @@ for vs=0.75:0.01:1
 end
 
 
-%% A enlever du mode commentaire pour sauvergarder l'image
-% %Here we preserve the size of the image when we save it.
-% set(gcf,'InvertHardcopy','on');
-%     set(gcf,'PaperUnits', 'inches');
-%     papersize = get(gcf, 'PaperSize');
-%     left = (papersize(1)- width)/2;
-%     bottom = (papersize(2)- height)/2;
-%     myfiguresize = [left, bottom, width, height];
-%     set(gcf,'PaperPosition', myfiguresize);
-% 
-% % Save the file as PNG
-% % r300 correspond a la definition
-% print('Diagramme','-dpng','-r100');
+% A enlever du mode commentaire pour sauvergarder l'image
+%Here we preserve the size of the image when we save it.
+set(gcf,'InvertHardcopy','on');
+    set(gcf,'PaperUnits', 'inches');
+    papersize = get(gcf, 'PaperSize');
+    left = (papersize(1)- width)/2;
+    bottom = (papersize(2)- height)/2;
+    myfiguresize = [left, bottom, width, height];
+    set(gcf,'PaperPosition', myfiguresize);
+
+% Save the file as PNG
+% r300 correspond a la definition
+print('Diagramme','-dpng','-r300');
 
