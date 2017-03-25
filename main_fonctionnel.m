@@ -9,8 +9,8 @@ close all
 Ptot=101325; %Pa
 
 % Cp constants
-Cpair_humide=1040; % J/kg/K
-R=8.314; % J/mol/K
+Cpair_humide=1040; %J/kg/K
+R=8.314; %J/mol/K
 Mas= 28.965338*10^-3 ; %kg/mol
 Mv= 18.01528*10^-3 ; 
 
@@ -18,15 +18,7 @@ Mv= 18.01528*10^-3 ;
 Tmin=-15;
 Tmax=50;
 
-T=[Tmin:0.01:Tmax];
-
-
-
-%Nb de courbes iso
-
-
-nb_iso=20; %nombre de courbes iso par fenetre
-
+T=[Tmin:0.01:Tmax]; %T augmente de 1 degre par pas de 100
 
 %% Trace de omega en fct de T
 
@@ -40,51 +32,41 @@ omega_max=0.622*(Pvs_max./(Ptot-Pvs_max)); %cours de Mr. Boichot
 vs_min= ((Mv/Mas)) * (R*(Tmin+273.15)/(Ptot*Mv));  
 vs_max=((Mv/Mas)+omega_max) * (R*(Tmax+273.15)/(Ptot*Mv)); 
 
-h_min=0; % mettre les formules en fonction de T
-h_max=300;
-
-
-
 %% Tracer du diagramme psychrometrique
 
 figure(1)
+hold 
 
-%% En HD 
+%% Parametres de l'image 
 width = 16.5;     % Width in inches
 height = 23.4;    % Height in inches
 alw = 0.75;    % AxesLineWidth
-fsz = 11;      % Fontsize
+fsz = 10;      % Fontsize
 lw = 1.5;      % LineWidth
 msz = 8;       % MarkerSize
 
 %%%%%%%%%%%%%%%%%%%%%%%% Mise en forme  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-% 'stem' trace les traits verticaux sous la courbe de saturation
-
-
-hold 
-
 pos = get(gcf, 'Position');
+
+abscisses=T(1:100:end);
+ordonnees=[0:0.001:0.06];
+
 set(gcf, 'Position', [pos(1) pos(2) width*100, height*100]); % choix de la taille de l'image
-set(gca, 'FontSize', fsz, 'LineWidth', alw,'Box','off'); %,'XTick',T(1:(1000/65):end-2)); %<- Set properties, choix notamment des graduations abscisses
+set(gca, 'FontSize', fsz, 'LineWidth', alw,'Box','off','XTick',abscisses,...
+    'YTick',ordonnees); %<- Choix propertees, choix notamment des graduations abscisses/ordonnees
 
 title('Abaque psychrometrique simplifie')
-
-xlabel('T en ?C')
+xlim([Tmin Tmax])
+ylim([0 0.06])
+xlabel('T en {\circ}C')
 ylabel('omega en kg/kg')
 
-xlim([Tmin Tmax])
-ylim([0 0.05])
+
 
 % Gestion des axes
 axes=gca;
 axes.YAxisLocation='right'
-axes.FontSize=12;
-%axes.FontWeight='bold';
-
-
-%Echelles secondaires
+axes.FontSize=10;
 
 Pvs=pression_vapPa(T);
 omega=0.622.*(Pvs./(Ptot-Pvs));
@@ -92,7 +74,6 @@ omega=0.622.*(Pvs./(Ptot-Pvs));
 pressions_partiellesPa=pressionpartielle_fomega(omega,Ptot);
 pressions_partielleskgcm2=pressions_partiellesPa.*1E-5;
 
-plotyy(T,omega,T,pressions_partielleskgcm2,'plot');
 
 %% Trac?? de la courbe de saturation
 
@@ -109,7 +90,7 @@ Pvs_legende=pression_vapPa(Tlegende);
 courbe_sat_legende=0.622.*(Pvs_legende./(Ptot-Pvs_legende));
 
 pas=0.2;
-for i=pas:pas:1
+for i=0:pas:1
     plot(T, i*courbe_sat, '-k')
     n=i*100;
     str=['\epsilon=' num2str(n) '%'];
@@ -122,7 +103,7 @@ end
 %'Extent',[xt-1 yt-0.0015 3 0.003] pour tracer un carr?? blanc autour du
 %texte mais ca marche pas
 
-legend('f(x)', 'g(x)', 'f(x)=g(x)', 'Location', 'SouthEast');
+legend('f(x)', 'g(x)', 'f(x)=g(x)', 'Location', 'NorthWest');
 
 
 title('Improved Example Figure');
@@ -147,20 +128,13 @@ for h=-4:0.5:60 %nombre de droites, intervalle d'enthalpies
     end
     
     h=h/4.184;
-    markerstep=20; %pour espacer les points des droites au dessus de la courbe de saturation
-    
-    if mod(h,1)==0
-        
-        plot(T(k:end), iso_h(k:end), '-b') 
-    else 
-        plot(T(k:end), iso_h(k:end), '-b')
-    end
-    
+    plot(T(k:end), iso_h(k:end), '-b') 
+
     
     %gestion de la legende 
     %on met la legende au point d'intersection entre courbes Pvsat et isenthapiques
     if h<=55 
-        if mod(h,2)==0%seulement 1/2
+        if mod(h,2)==0 %seulement 1/2
 
 
             str={h};
@@ -172,6 +146,11 @@ for h=-4:0.5:60 %nombre de droites, intervalle d'enthalpies
         while iso_h(k)>=Ech_h(k)
             k=k+1;
         end
+        
+        %on prolonge les courbes en pointilles jusqu'a l'echelle
+        markerstep=20; %pour espacer les points des droites au dessus de la courbe de saturation
+        plot(T(k:markerstep:end), iso_h(k:markerstep:end),'.b','MarkerSize',0.1)  
+        
         text(T(k),Ech_h(k),'-','FontSize',10,'Color','blue','rotation',-45)
         if h>=0 && h<49
             str={h};
@@ -195,13 +174,30 @@ for vs=0.75:0.01:1
          
     end
     %plot(T(1:k),omega_vs(1:k),':y') pas forcement necessaire de les prolonger
-    plot(T(k:end),omega_vs(k:end),':red') 
+    plot(T(k:end),omega_vs(k:end),'-r') 
     
 end
 
 FigHandle = figure(1);
-set(FigHandle, 'Position', [100, 100, 720, 800]); %apercu de l'image finale au bon format sur Matlab 
+set(FigHandle, 'Position', [100, 100, 1000, 1200]); %apercu de l'image finale au bon format sur Matlab 
 
+%% Grid 
+
+%on trace la grille selon les abcisses (des temperatures) sous la courbe de sat
+stem(T(1:100:end), courbe_sat(1:100:end), 'k','LineWidth',lw/3, 'Marker', '.') 
+%et la grille selon les ordonnes 
+L_ordo=length(ordonnees);  
+
+
+for i=1:L_ordo
+    omeg=ordonnees(i);
+    fun = @(x) 0.622.*(pression_vapPa(x)./(Ptot-pression_vapPa(x)))-omeg;
+    T_vapsat(i) = fsolve(fun, i-10);
+    plot([T_vapsat(i), Tmax],[ordonnees(i) ordonnees(i)],'color',[0.2 0.2 0.2]);
+end
+
+
+%% Logo Phelma 
 
 % % A enlever du mode commentaire pour sauvergarder l'image
 % %Here we preserve the size of the image when we save it.
