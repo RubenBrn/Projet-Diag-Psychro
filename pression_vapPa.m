@@ -1,9 +1,9 @@
-function [Pvs]=pression_vap(T)
+function [Pvs]=pression_vap(T) %Cours de Mr. Boichot
     
     if 11<=T<=68
         a=10.23-(1750./(T+235));
         Pvs=10.^a;
-    elseif 5<=T<11 || 68<T<90
+    elseif 5<=T<11 || 68<T<90 %partie de la fonction qui pose probl?me ? l'inversion
         a=13.7-(5120./T);
         b=exp(a);
         Pvs=b*1.013*10^5;
