@@ -1,4 +1,4 @@
 function [om] = omega_fpression (P)
        Ptot=101325; %Pa
-       om=0.622*(P)./(Ptot-P);
+       om=0.621945*(P)./(Ptot-P);
 end
