@@ -9,11 +9,17 @@ close all
 Ptot=101325; %Pa
 
 
-% Cp constants
-Cpair_humide=1040; %J/kg/K    %Cpair_humide= %air Cpair + %eau Cpeau (Cpeau~4200 J/kg/K Cpair=1007 J/kg/K)
+% Constantes
+Cp_as = 1.005 % kJ/kg/K (the engineering toolbox)
+Cp_eau = 4.180   %kJ/kg/K (the engineering toolbox)
+Lv_eau = 2257.92 % kJ/kg
+Cpair_humide=1040; %J/kg/K    %Cpair_humide= %air Cpair + %eau Cpeau (Cpeau~4180 J/kg/K Cpair=1005 J/kg/K)
 R=8,3144621; %J/mol/K
-Mas= 28.965338*10^-3 ; %kg/mol
+Mas= 28.96546*10^-3 ; %kg/mol
 Mv= 18.01528*10^-3 ; 
+
+hlg = 2501000; %J/kg
+cw  = 1860;
 
 % Variables
 Tmin=-15;
@@ -29,11 +35,17 @@ T=[Tmin:0.01:Tmax]; %T augmente de 1 degre par pas de 100
 Pvs_min=pression_vapPa(Tmin);
 Pvs_max=pression_vapPa(Tmax);
 
-omega_max=0.621945*(Pvs_max./(Ptot-Pvs_max)); %cours de Mr. Boichot %pas touvé de fle plus précise
-
+omega_max=0.621945*(Pvs_max./(Ptot-Pvs_max)); 
 
 vs_min= ((Mv/Mas)) * (R*(Tmin+273.15)/(Ptot*Mv));  
 vs_max=((Mv/Mas)+omega_max) * (R*(Tmax+273.15)/(Ptot*Mv)); 
+
+Pvs=pression_vapPa(T);
+omega=0.621945.*(Pvs./(Ptot-Pvs)); % vient de psychrometric news
+
+pressions_partiellesPa=pressionpartielle_fomega(omega,Ptot);
+pressions_partielleskgcm2=pressions_partiellesPa.*1E-5;
+
 
 %% Tracer du diagramme psychrometrique
 
@@ -75,11 +87,6 @@ axes=gca;
 axes.YAxisLocation='right'
 axes.FontSize=8;
 
-Pvs=pression_vapPa(T);
-omega=0.621945.*(Pvs./(Ptot-Pvs)); % vient de psychrometric news
-
-pressions_partiellesPa=pressionpartielle_fomega(omega,Ptot);
-pressions_partielleskgcm2=pressions_partiellesPa.*1E-5;
 
 
     
@@ -130,7 +137,8 @@ Ech_h=pente_ech_H*(T+31); %droite d'echelle
 for h=-4:0.5:60 %nombre de droites, intervalle d'enthalpies
     
     h=4.184*h; %conversion dans la bonne unite
-    iso_h=1/2500*(h-1.826*T); %en valeur de omega  % pas trouvé de fle plus précise
+    iso_h=(h-Cp_as*T)./(Lv_eau+Cp_eau*T);  % fle de psychrometric news
+    
     
     k=1; %compteur pour trouver l'intersection entre Pv_sat et iso_h
     while iso_h(k)>courbe_sat(k)
