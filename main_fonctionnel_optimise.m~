@@ -128,16 +128,12 @@ title('Improved Example Figure');
 
 %pente pour tracer ensuite l'echelle transversale
 pente_ech_H=1/2500*1.826;
-
-%calcul de l'intersection entre le bord de l'image et l'axe 
 k=1; 
-while courbe_sat(k)<=omega_maxaffich
-    k=k+1;
-end
-b=omega_maxaffich-pente_ech_H*T(k); %coeff d'ordonnee a l'origine
 
-Ech_h=pente_ech_H*T+b; %droite d'echelle
 
+Ech_h=pente_ech_H*(T+51); %droite d'echelle
+
+%le 31 est a revoir pour optimiser au mieux l'intersection de l'axe et du bord de l'image 
 
 %%%%%%%%%%%%%%%%%%%%%%%% Axe enthalpie %%%%%%%%%%%%%%%%%%%
 
@@ -160,9 +156,7 @@ for h=-4:0.5:60 %nombre de droites, intervalle d'enthalpies
     
     %gestion de la legende 
     %on met la legende au point d'intersection entre courbes Pvsat et isenthapiques
-    if h<=47 
-        %% -     --> 47 a revoir 
-        
+    if h<=54 
         if mod(h,2)==0 %seulement 1/2
             str={h};
             text(T(k),iso_h(k),str,'FontSize',10,'Color','blue','rotation',(h)/38*50)
@@ -170,34 +164,33 @@ for h=-4:0.5:60 %nombre de droites, intervalle d'enthalpies
         
         %creation de l'echelle en diagonale
         
-        %if 
         %intersection isenthalpes et axe diagonal 
-            k=1;
-            while iso_h(k)>=Ech_h(k) 
-                k=k+1;
-            end
-
-            %on prolonge les courbes en pointilles jusqu'a l'echelle
-            markerstep=10; %pour espacer les points des droites au dessus de la courbe de saturation
-            plot(T(k:markerstep:end), iso_h(k:markerstep:end),'.b','MarkerSize',0.5)  
-
-            text(T(k),Ech_h(k),'-','FontSize',10,'Color','blue','rotation',-45)
-            if h>0 && h<49 && mod(h,1)==0
-                str={h};
-                text(T(k)-0.5,Ech_h(k)+0.0003,str,'FontSize',10,'Color','blue','rotation',55.5)
-                if h==26
-                    text(T(k)+0.5,Ech_h(k)+0.002,'h en kcal/kg','FontSize',12,'Color','blue','rotation',56)
-                end 
-            end
+        k=1;
+        while iso_h(k)>=Ech_h(k)
+            k=k+1;
+        end
+        
+        %on prolonge les courbes en pointilles jusqu'a l'echelle
+        markerstep=10; %pour espacer les points des droites au dessus de la courbe de saturation
+        plot(T(k:markerstep:end), iso_h(k:markerstep:end),'.b','MarkerSize',0.5)  
+        
+        text(T(k),Ech_h(k),'-','FontSize',10,'Color','blue','rotation',-45)
+        if h>0 && h<49 && mod(h,1)==0
+            str={h};
+            text(T(k)-0.5,Ech_h(k)+0.0003,str,'FontSize',10,'Color','blue','rotation',55.5)
+        	if h==26
+                text(T(k)+0.5,Ech_h(k)+0.002,'h en kcal/kg','FontSize',12,'Color','blue','rotation',56)
+            end 
+        end
     end
 
 end
 
 %axe diagonale des enthalpies
-Tenthap=T(1:end);% im=imread('index.jpg')
+Tenthap=T(1:end-900);% im=imread('index.jpg')
 % imagesc(im)
 
-plot(Tenthap, Ech_h(1:end), '-b') 
+plot(Tenthap, Ech_h(1:end-900), '-b') 
 
 %% Trace des volumes specifiques
 for vs=0.75:0.01:1
@@ -317,8 +310,8 @@ set(FigHandle, 'Position', [100, 100, 1000, 1200]); %apercu de l'image finale au
 
 
 
-% A enlever du mode commentaire pour sauvergarder l'image
-
+% % A enlever du mode commentaire pour sauvergarder l'image
+% 
 % %         Here we preserve the size of the image when we save it.
 %         set(gcf,'InvertHardcopy','on');
 %             set(gcf,'PaperUnits', 'inches');
