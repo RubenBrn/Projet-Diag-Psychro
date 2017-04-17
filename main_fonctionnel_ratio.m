@@ -56,9 +56,9 @@ hold
 
 %% Parametres de l'image 
 
-% taille de la feuille o?? on imprime (A3)
-width = 16.5;     % Width in inches
-height = 23.4;    % Height in inches
+% taille de la feuille, on imprime (A3)
+width = 29.7 ;     % Width in cm
+height = 42;    % Height in cm
 alw = 0.75;    % AxesLineWidth
 fsz = 10;      % Fontsize
 lw = 1.5;      % LineWidth
@@ -66,6 +66,7 @@ msz = 8;       % MarkerSize
 
 %%%%%%%%% --> Choix du format d'affichage ici 
 pbaspect([21 29.7 1])
+set(gcf,'units','centimeters','position',[1,1,width,height])
 
 %% %%%%%%%%%%%%%%%%%%%%%% Mise en forme  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 pos = get(gcf, 'Position');
@@ -235,7 +236,7 @@ for i=2:L_ordo
     elseif i==2
         plot ([Tmin, Tmax], [ordonnees(i) ordonnees(i)],'color', [0.2 0.2 0.2],'LineWidth',lw/4);
     else 
-        T_vapsat(i)= fsolve(fun, i);
+        T_vapsat(i)= fsolve(fun, i-5);
         plot([T_vapsat(i), Tmax_affiche],[ordonnees(i) ordonnees(i)],'color',[1 0.2 0.2],'LineWidth',lw/4);
     end 
     
@@ -322,19 +323,19 @@ imagesc([Tmin+5 Tmin+25], [0.06 0.052], logo_Phelma)
 str = {'\itAlice  BOUDET','Ruben BRUNETAUD'};
 text(Tmin+5,0.052,str, 'Fontsize', 24, 'Interpreter', 'Tex')
 
-
-%A enlever du mode commentaire pour sauvergarder l'image
-
-%         Here we preserve the size of the image when we save it.
-            set(gcf,'InvertHardcopy','on');
-            set(gcf,'PaperUnits', 'inches');
-            papersize = get(gcf, 'PaperSize');
-            left = (papersize(1)- width)/2;
-            bottom = (papersize(2)- height)/2;
-            myfiguresize = [left, bottom, width, height];
-            set(gcf,'PaperPosition', myfiguresize);
-        
-%         Save the file as PNG
-%         r300 correspond a la definition
-        print('Diagramme','-dpng','-r100');
+% 
+% %A enlever du mode commentaire pour sauvergarder l'image
+% 
+% %         Here we preserve the size of the image when we save it.
+%             set(gcf,'InvertHardcopy','on');
+%             set(gcf,'PaperUnits', 'centimeters');
+%             papersize = get(gcf, 'PaperSize');
+%             left = (papersize(1)- width)/2;
+%             bottom = (papersize(2)- height)/2;
+%             myfiguresize = [left, bottom, width, height];
+%             set(gcf,'PaperPosition', myfiguresize);
+%         
+% %         Save the file as PNG
+% %         r300 correspond a la definition
+%         print('Diagramme','-dpng','-r300');
 

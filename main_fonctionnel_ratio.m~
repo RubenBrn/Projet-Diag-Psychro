@@ -67,6 +67,7 @@ msz = 8;       % MarkerSize
 %%%%%%%%% --> Choix du format d'affichage ici 
 pbaspect([21 29.7 1])
 
+
 %% %%%%%%%%%%%%%%%%%%%%%% Mise en forme  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 pos = get(gcf, 'Position');
 
@@ -125,7 +126,7 @@ title('Diagramme psychrometrique');
 %% courbes isenthalpes 
 
 %pente pour tracer ensuite l'echelle transversale
-pente_ech_H=1/2500*1.826;
+pente_ech_H=Cp_as/Lv_eau; %oppose du coeff direct des isenthalpes, voir formule L.147
 
 %calcul de l'intersection entre le bord de l'image et l'axe 
 k=1; 
@@ -161,7 +162,7 @@ for h=-4:0.5:60 %nombre de droites, intervalle d'enthalpies
     if h<=47 
         %% -     --> 47 a revoir 
         
-        if mod(h,2)==0 && k%seulement 1/2
+        if mod(h,2)==0 && k>=2%seulement 1/2
             str={h};
             text(T(k-2),iso_h(k-2),str,'FontSize',10,'Color','blue','rotation',(h)/38*50)
         end
@@ -183,8 +184,8 @@ for h=-4:0.5:60 %nombre de droites, intervalle d'enthalpies
             if h>0 && h<49 && mod(h,1)==0
                 str={h};
                 text(T(k)-0.5,Ech_h(k)+0.0003,str,'FontSize',10,'Color','blue','rotation',55.5)
-                if h==26
-                    text(T(k)+0.5,Ech_h(k)+0.002,'h en kcal/kg','FontSize',12,'Color','blue','rotation',56)
+                if h==26 %26 pour etre au milieu de l'axe
+                    text(T(k)+0.5,Ech_h(k)+0.002,'h en kcal/kg','FontSize',12,'Color','blue','rotation',atand( pente_ech_H ))
                 end 
             end
     end
@@ -197,8 +198,8 @@ Tenthap=T(1:end);
 
 plot(Tenthap, Ech_h(1:end), '-b') 
 
-%% Trace des volumes specifiques
-for vs=0.75:0.01:1
+%% Trace des isovolumes specifiques
+for vs=0.70:0.01:1
     omega_vs=(vs.*Ptot.* Mv)./(R.*(T+273.15)) - (Mv/Mas); % formule exacte (file:///users/phelma/phelma2015/boudetal/Documents/Projet%20abaque%20air%20humide/docs%20ext%C3%A9rieurs/Calcul%20des%20param%C3%A8tres%20de%20l'air%20humide%20-%20Projet%20AntiSecos.htm
     k=1; %compteur 
     
@@ -321,20 +322,20 @@ imagesc([Tmin+5 Tmin+25], [0.06 0.052], logo_Phelma)
 
 str = {'\itAlice  BOUDET','Ruben BRUNETAUD'};
 text(Tmin+5,0.052,str, 'Fontsize', 24, 'Interpreter', 'Tex')
-
-
-%A enlever du mode commentaire pour sauvergarder l'image
-
-%         Here we preserve the size of the image when we save it.
-            set(gcf,'InvertHardcopy','on');
-            set(gcf,'PaperUnits', 'inches');
-            papersize = get(gcf, 'PaperSize');
-            left = (papersize(1)- width)/2;
-            bottom = (papersize(2)- height)/2;
-            myfiguresize = [left, bottom, width, height];
-            set(gcf,'PaperPosition', myfiguresize);
-        
-%         Save the file as PNG
-%         r300 correspond a la definition
-        print('Diagramme','-dpng','-r200');
+% 
+% 
+% %A enlever du mode commentaire pour sauvergarder l'image
+% 
+% %         Here we preserve the size of the image when we save it.
+%             set(gcf,'InvertHardcopy','on');
+%             set(gcf,'PaperUnits', 'inches');
+%             papersize = get(gcf, 'PaperSize');
+%             left = (papersize(1)- width)/2;
+%             bottom = (papersize(2)- height)/2;
+%             myfiguresize = [left, bottom, width, height];
+%             set(gcf,'PaperPosition', myfiguresize);
+%         
+% %         Save the file as PNG
+% %         r300 correspond a la definition
+%         print('Diagramme','-dpng','-r100');
 
