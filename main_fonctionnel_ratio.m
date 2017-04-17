@@ -65,13 +65,14 @@ lw = 1.5;      % LineWidth
 msz = 8;       % MarkerSize
 
 %%%%%%%%% --> Choix du format d'affichage ici 
-pbaspect([21 29.7 1])
 
+pbaspect([21 29.7 1])
 %% %%%%%%%%%%%%%%%%%%%%%% Mise en forme  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 pos = get(gcf, 'Position');
 
+%Vecteurs pour les ticks en abscisse et ordonnee
 abscisses=T(1:100:end);
-ordonnees=[0:0.001:0.06];
+ordonnees=[0:0.001:omega_maxaffich];
 
 
 set(gca, 'FontSize', fsz, 'LineWidth', alw,'Box','off','XTick',abscisses,...
@@ -108,6 +109,7 @@ Tlegende=2*Tmax/3;
 Pvs_legende=pression_vapPa(Tlegende);
 courbe_sat_legende=0.621945.*(Pvs_legende./(Ptot-Pvs_legende));
 
+%droites et legendes selon les pourcentages d'humidite
 pas=0.2;
 for i=0:pas:1
     plot(T, i*courbe_sat, '-k')
@@ -152,6 +154,7 @@ for h=-4:0.5:60 %nombre de droites, intervalle d'enthalpies
         k=k+1;
     end
     
+    %on repasse en valeurs entieres
     h=h/4.184;
     plot(T(k:end), iso_h(k:end), '-b') 
 
@@ -192,21 +195,21 @@ for h=-4:0.5:60 %nombre de droites, intervalle d'enthalpies
 end
 
 %axe diagonale des enthalpies
-Tenthap=T(1:end);
-
-
-plot(Tenthap, Ech_h(1:end), '-b') 
+plot(T, Ech_h, '-b') 
 
 %% Trace des isovolumes specifiques
+
+%CHECK --> Valeur de Vs a calculer en fonction du reste 
+
 for vs=0.70:0.01:1
     omega_vs=(vs.*Ptot.* Mv)./(R.*(T+273.15)) - (Mv/Mas); % formule exacte (file:///users/phelma/phelma2015/boudetal/Documents/Projet%20abaque%20air%20humide/docs%20ext%C3%A9rieurs/Calcul%20des%20param%C3%A8tres%20de%20l'air%20humide%20-%20Projet%20AntiSecos.htm
     k=1; %compteur 
     
+    %on cherche l'intersection entre la courbe de saturation et les isovolumes
     while omega_vs(k)>courbe_sat(k)
-        k=k+1;
-         
+        k=k+1;    
     end
-    %plot(T(1:k),omega_vs(1:k),':y') pas forcement necessaire de les prolonger
+
     plot(T(k:end),omega_vs(k:end),'-r') 
     
 end
@@ -215,11 +218,11 @@ end
 
 %%%%%%%%%%% trace de la grille et des autres echelles %%%%%%%%%%%%%%
 
-%on trace la grille selon les abcisses (des temperatures) sous la courbe de sat
+%on trace la grille verticale (selon les temperatures) sous la courbe de sat
 stem(T(1:100:end), courbe_sat(1:100:end), 'k','LineWidth',lw/4, 'Marker', '.') 
 %et la grille selon les ordonnes 
-L_ordo=length(ordonnees);  
 
+L_ordo=length(ordonnees);  
 
 %on voit que la fonction fsolve fonctionne sur les T entre 50 et 11?C mais bug ensuite 
 %dans une seconde boucle, on calcule donc la solution a la main pour aider le programme 
@@ -247,11 +250,14 @@ end
 
 %%%%%% ordonnees Volume specifique %%%%%%%%%%%
 % valeurs
+
 line([Tmax Tmax],[0 100],'color','r')
 
+%valeurs a calculer !!
 Vs_ord_min=0.88;
 Vs_ord_max=0.965;
 Vs_abs_min=0.7;
+
 valeurs=[Vs_ord_min:0.005:Vs_ord_max];
 for k=1:length(valeurs)
     om=(valeurs(k).*Ptot.* Mv)./(R.*(Tmax+273.15)) -( Mv /Mas); 
@@ -263,7 +269,7 @@ text(Tmax,0.0601,{'volume specifique','en m^3/kg'},'Fontsize',10,'rotation',90, 
 % graduations
 valeurs_traits=[Vs_ord_min:0.001:Vs_ord_max];
 for k=1:length(valeurs_traits)
-    om=(valeurs_traits(k).*Ptot.* Mv)./(R.*(Tmax+273.15)) -( Mv /Mas); 
+    om=(valeurs_traits(k).*Ptot.* Mv)./(R.*(Tmax+273.15)) -(Mv/Mas); 
     line([Tmax Tmax+0.4],[om om],'color','r')
 end 
 
@@ -288,6 +294,7 @@ end
 
 
 %%%%%%%%%% Ordonnees %% Pression Partielle %%%%%%%%%%
+
 % valeurs sur l'axe
 valeurs=[0:0.005:0.085];
 valeursPa=valeurs./1E-5; %passage en bar
