@@ -139,7 +139,7 @@ end
 b=omega_maxaffich-pente_ech_H*T(k); %coeff d'ordonnee a l'origine
 
 Ech_h=pente_ech_H*T+b; %droite d'echelle
-
+Angle_pente_H=atand(pente_ech_H*(height/width)*((T(end)-T(1))/omega_maxaffich)); %angle sur la figure finale
 
 %%%%%%%%%%%%%%%%%%%%%%%% Axe enthalpie %%%%%%%%%%%%%%%%%%%
 
@@ -187,9 +187,9 @@ for h=-4:0.5:60 %nombre de droites, intervalle d'enthalpies
             text(T(k),Ech_h(k),'-','FontSize',10,'Color','blue','rotation',-45)
             if h>0 && h<49 && mod(h,1)==0
                 str={h};
-                text(T(k)-0.5,Ech_h(k)+0.0003,str,'FontSize',10,'Color','blue','rotation',55.5)
+                text(T(k)-0.5,Ech_h(k)+0.0003,str,'FontSize',10,'Color','blue','rotation',Angle_pente_H)
                 if h==26 %26 pour etre au milieu de l'axe
-                    text(T(k)+0.5,Ech_h(k)+0.002,'h en kcal/kg','FontSize',12,'Color','blue','rotation',atand( pente_ech_H ))
+                    text(T(k)+0.5,Ech_h(k)+0.002,'h en kcal/kg','FontSize',12,'Color','blue','rotation', Angle_pente_H)
                 end 
             end
     end
@@ -331,19 +331,19 @@ imagesc([Tmin+5 Tmin+25], [0.06 0.052], logo_Phelma)
 str = {'\itAlice  BOUDET','Ruben BRUNETAUD'};
 text(Tmin+5,0.052,str, 'Fontsize', 24, 'Interpreter', 'Tex')
 
-% 
-% %A enlever du mode commentaire pour sauvergarder l'image
-% 
-% %         Here we preserve the size of the image when we save it.
-%             set(gcf,'InvertHardcopy','on');
-%             set(gcf,'PaperUnits', 'centimeters');
-%             papersize = get(gcf, 'PaperSize');
-%             left = (papersize(1)- width)/2;
-%             bottom = (papersize(2)- height)/2;
-%             myfiguresize = [left, bottom, width, height];
-%             set(gcf,'PaperPosition', myfiguresize);
-%         
-% %         Save the file as PNG
-% %         r300 correspond a la definition
-%         print('Diagramme','-dpng','-r300');
+
+%A enlever du mode commentaire pour sauvergarder l'image
+
+%         Here we preserve the size of the image when we save it.
+            set(gcf,'InvertHardcopy','on');
+            set(gcf,'PaperUnits', 'centimeters');
+            papersize = get(gcf, 'PaperSize');
+            left = (papersize(1)- width)/2;
+            bottom = (papersize(2)- height)/2;
+            myfiguresize = [left, bottom, width, height];
+            set(gcf,'PaperPosition', myfiguresize);
+        
+%         Save the file as PNG
+%         r300 correspond a la definition
+        print('Diagramme','-dpng','-r100');
 
