@@ -24,8 +24,8 @@ cw  = 1860;
 % Variables
 Tmin=-15;
 Tmax=50;
-Tmax_affiche=Tmax+4; %valeur de temperature pour l'affichage et non pas pour le calul
-Tmin_affiche=Tmin+4;
+Tmax_affiche=Tmax+4; %valeur de temperature pour l'affichage et non pas pour e calul
+Tmin_affiche=Tmin-4;
 omega_maxaffich=0.06;
 
 T=[Tmin:0.01:Tmax]; %T augmente de 1 degre par pas de 100
@@ -60,7 +60,7 @@ hold
 width = 29.7 ;     % Width in cm
 height = 42;    % Height in cm
 alw = 0.75;    % AxesLineWidth
-fsz = 10;      % Fontsize
+fsz = 8;      % Fontsize
 lw = 1.5;      % LineWidth
 msz = 8;       % MarkerSize
 
@@ -119,7 +119,7 @@ for i=0:pas:1
     str=['\epsilon=' num2str(n) '%'];
     xt=Tlegende;
     yt=(i*courbe_sat_legende)+(0.0007)*exp(i/2); 
-    text(xt,yt+0.001,str,'FontSize',10,'Color','black','rotation',65*i)
+    text(xt,yt+0.001,str,'FontSize',fsz,'Color','black','rotation',66*i)
 
 end 
 
@@ -168,7 +168,7 @@ for h=-4:0.5:60 %nombre de droites, intervalle d'enthalpies
         
         if mod(h,2)==0 && k>=2%seulement 1/2
             str={h};
-            text(T(k-2),iso_h(k-2),str,'FontSize',10,'Color','blue','rotation',(h)/38*50)
+            text(T(k)-1,iso_h(k)+0.0003,str,'FontSize',fsz,'Color','blue','rotation', 0)
         end
         
         %creation de l'echelle en diagonale
@@ -184,10 +184,11 @@ for h=-4:0.5:60 %nombre de droites, intervalle d'enthalpies
             markerstep=10; %pour espacer les points des droites au dessus de la courbe de saturation
             plot(T(k:markerstep:end), iso_h(k:markerstep:end),'.b','MarkerSize',0.5)  
 
-            text(T(k),Ech_h(k),'-','FontSize',10,'Color','blue','rotation',-45)
-            if h>0 && h<49 && mod(h,1)==0
+            text(T(k),Ech_h(k),'-','FontSize',fsz,'Color','blue','rotation',-Angle_pente_H)
+            %idem, les bornes de h sont a recalculer
+            if h>10 && h<49 && mod(h,1)==0
                 str={h};
-                text(T(k)-0.5,Ech_h(k)+0.0003,str,'FontSize',10,'Color','blue','rotation',Angle_pente_H)
+                text(T(k)-0.3,Ech_h(k),str,'FontSize',fsz,'Color','blue','rotation',Angle_pente_H)
                 if h==26 %26 pour etre au milieu de l'axe
                     text(T(k)+0.5,Ech_h(k)+0.002,'h en kcal/kg','FontSize',12,'Color','blue','rotation', Angle_pente_H)
                 end 
@@ -264,9 +265,9 @@ valeurs=[Vs_ord_min:0.005:Vs_ord_max];
 for k=1:length(valeurs)
     om=(valeurs(k).*Ptot.* Mv)./(R.*(Tmax+273.15)) -( Mv /Mas); 
     str={valeurs(k)};
-    text(Tmax+0.5,om,str,'Color','red')
+    text(Tmax+0.5,om,str,'Color','red','FontSize',fsz,'rotation', 0)
 end 
-text(Tmax,0.0601,{'volume specifique','en m^3/kg'},'Fontsize',10,'rotation',90, 'Color','red')
+text(Tmax,0.0601,{'volume specifique','en m^3/kg'},'Fontsize',fsz,'rotation',90, 'Color','red')
 
 % graduations
 valeurs_traits=[Vs_ord_min:0.001:Vs_ord_max];
@@ -283,9 +284,9 @@ valeurs=[Vs_abs_min:0.01:Vs_ord_min];
 for k=1:length(valeurs)
     temp=(valeurs(k)*Ptot*Mv-Mv*R*273.15/Mas)*Mas/(Mv*R);
     str={valeurs(k)};
-    text(temp,-0.001,str,'Color','r')
+    text(temp,-0.001,str,'FontSize',fsz,'Color','r')
 end 
-text(Tmax,-0.001,{'volume specifique','en m^3/kg'}, 'Color','red','Fontsize',10)
+text(Tmax,-0.001,{'volume specifique','en m^3/kg'}, 'Color','red','Fontsize',fsz+2)
 
 % graduations
 valeurs_traits=[0.730:0.001:0.915];
@@ -304,9 +305,9 @@ for k=1:length(valeurs)
     a=valeursPa(k);
     om=omega_fpression(a);
     str={valeurs(k)};
-    text(Tmax+2.5,om,str, 'Color',[0 0.5 0.5])
+    text(Tmax+2.5,om,str,'FontSize',fsz, 'Color',[0 0.5 0.5],'rotation',0)
 end 
-text(Tmax+2,0.0601,{'pression partielle','en kg/cm^2'},'Fontsize',10,'rotation',90,'Color',[0 0.5 0.5])
+text(Tmax+2,0.0601,{'pression partielle','en kg/cm^2'},'Fontsize',fsz+2,'rotation',90,'Color',[0 0.5 0.5])
 
 %axe 
 line([Tmax+2 Tmax+2], ylim,'Color',[0 0.5 0.5]); 
@@ -317,7 +318,7 @@ valeursPa_traits=valeurs_traits./1E-5;
 for k=1:length(valeurs_traits)
     a=valeursPa_traits(k);
     om=omega_fpression(a);
-    line([52 52.4],[om om],'Color',[0 0.5 0.5])
+    line([Tmax_affiche-2 Tmax_affiche-1.6],[om om],'Color',[0 0.5 0.5])
 end
 
 
@@ -329,7 +330,7 @@ logo_Phelma=imread('logo.png');
 imagesc([Tmin+5 Tmin+25], [0.06 0.052], logo_Phelma)
 
 str = {'\itAlice  BOUDET','Ruben BRUNETAUD'};
-text(Tmin+5,0.052,str, 'Fontsize', 24, 'Interpreter', 'Tex')
+text(Tmin+5,0.052,str, 'Fontsize', 2*fsz, 'Interpreter', 'Tex')
 
 
 %A enlever du mode commentaire pour sauvergarder l'image
@@ -345,5 +346,5 @@ text(Tmin+5,0.052,str, 'Fontsize', 24, 'Interpreter', 'Tex')
         
 %         Save the file as PNG
 %         r300 correspond a la definition
-        print('Diagramme','-dpng','-r100');
+        print('Diagramme','-dpng','-r200');
 
