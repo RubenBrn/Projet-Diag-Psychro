@@ -186,10 +186,10 @@ plot(T, Ech_h, '-b')
 
 %% Traces des isovolumes specifiques
 
-Vs_min_ordonnes=fix(100*vs_min)/100; 
-Vs_max_ordonnees=fix(100*vs_max)/100;
+vs_min_iso=fix(100*vs_min)/100;
+vs_max_ordonnees=fix(100*vs_max)/100;
 
-for vs=Vs_min_ordonnes:0.01:Vs_max_ordonnees
+for vs=vs_min_iso:0.01:vs_max_ordonnees
     omega_vs=(vs.*Ptot.* Mv)./(R.*(T+273.15)) - (Mv/Mas); % formule exacte (file:///users/phelma/phelma2015/boudetal/Documents/Projet%20abaque%20air%20humide/docs%20ext%C3%A9rieurs/Calcul%20des%20param%C3%A8tres%20de%20l'air%20humide%20-%20Projet%20AntiSecos.htm
 
     k=1; %compteur
@@ -205,6 +205,7 @@ end
 
 % Trace de l'axe des ordonnees en volume sp?cifique
 
+<<<<<<< HEAD
 %on trace la grille verticale (selon les temperatures) sous la courbe de sat
 stem(T(1:100:end), courbe_sat(1:100:end), 'k','LineWidth',lw/4, 'Marker', '.')
 %et la grille selon les ordonnes
@@ -241,7 +242,7 @@ end
 line([Tmax Tmax],[0 omega_maxaffich],'color','r')
 
 
-valeurs=[Vs_min_ordonnes:0.005:Vs_max_ordonnees];
+valeurs=[vs_min_iso:0.005:vs_max_ordonnees];
 for k=1:length(valeurs)
     om=(valeurs(k).*Ptot.* Mv)./(R.*(Tmax+273.15)) -( Mv /Mas); % abscisses des graduations
     str={valeurs(k)};
@@ -250,7 +251,7 @@ end
 text(Tmax,0.0601,{'volume specifique','en m^3/kg'},'Fontsize',fsz,'rotation',90, 'Color','red')
 
 % graduations
-valeurs_traits=[Vs_min_ordonnes:0.001:Vs_max_ordonnees];
+valeurs_traits=[vs_min_iso:0.001:vs_max_ordonnees];
 for k=1:length(valeurs_traits)
     om=(valeurs_traits(k).*Ptot.* Mv)./(R.*(Tmax+273.15)) -(Mv/Mas);
     line([Tmax Tmax+0.4],[om om],'color','r')
@@ -273,7 +274,7 @@ text(Tmax,-0.001,{'volume specifique','en m^3/kg'}, 'Color','red','Fontsize',fsz
 
 % graduations
 
-valeurs_traits=[Vs_min_ordonnes:0.001:vs_max_iso];
+valeurs_traits=[vs_min_iso:0.001:vs_max_iso];
 
 for k=1:length(valeurs_traits)
     temp=(valeurs_traits(k)*Ptot*Mv-Mv*R*273.15/Mas)*Mas/(Mv*R);
