@@ -14,7 +14,7 @@ Cp_as = 1.005 % kJ/kg/K (the engineering toolbox)
 Cp_eau = 4.180   %kJ/kg/K (the engineering toolbox)
 Lv_eau = 2257.92 % kJ/kg
 Cpair_humide=1040; %J/kg/K    %Cpair_humide= %air Cpair + %eau Cpeau (Cpeau~4180 J/kg/K Cpair=1005 J/kg/K)
-R=8,3144621; %J/mol/K
+R = 8,3144621; %J/mol/K
 Mas= 28.96546*10^-3 ; %kg/mol
 Mv= 18.01528*10^-3 ; 
 
@@ -31,7 +31,6 @@ omega_maxaffich=0.06;
 T=[Tmin:0.01:Tmax]; %T augmente de 1 degre par pas de 100
 
 %% Trace de omega en fct de T
-
 
 Pvs_min=pression_vapPa(Tmin);
 Pvs_max=pression_vapPa(Tmax);
@@ -202,9 +201,10 @@ plot(T, Ech_h, '-b')
 
 %% Trace des isovolumes specifiques
 
-%CHECK --> Valeur de Vs a calculer en fonction du reste 
+vs_min_iso=fix(100*vs_min)/100;
+vs_max_ordonnees=fix(100*vs_max)/100;
 
-for vs=0.70:0.01:1
+for vs=vs_min_iso:0.01:vs_max_ordonnees
     omega_vs=(vs.*Ptot.* Mv)./(R.*(T+273.15)) - (Mv/Mas); % formule exacte (file:///users/phelma/phelma2015/boudetal/Documents/Projet%20abaque%20air%20humide/docs%20ext%C3%A9rieurs/Calcul%20des%20param%C3%A8tres%20de%20l'air%20humide%20-%20Projet%20AntiSecos.htm
     k=1; %compteur 
     
@@ -257,11 +257,8 @@ end
 line([Tmax Tmax],[0 100],'color','r')
 
 %valeurs a calculer !!
-Vs_ord_min=0.88;
-Vs_ord_max=0.965;
-Vs_abs_min=0.7;
 
-valeurs=[Vs_ord_min:0.005:Vs_ord_max];
+valeurs=[vs_min_iso:0.005:vs_max_ordonnees];
 for k=1:length(valeurs)
     om=(valeurs(k).*Ptot.* Mv)./(R.*(Tmax+273.15)) -( Mv /Mas); 
     str={valeurs(k)};
@@ -270,7 +267,7 @@ end
 text(Tmax,0.0601,{'volume specifique','en m^3/kg'},'Fontsize',fsz,'rotation',90, 'Color','red')
 
 % graduations
-valeurs_traits=[Vs_ord_min:0.001:Vs_ord_max];
+valeurs_traits=[vs_min_iso:0.001:vs_max_ordonnees];
 for k=1:length(valeurs_traits)
     om=(valeurs_traits(k).*Ptot.* Mv)./(R.*(Tmax+273.15)) -(Mv/Mas); 
     line([Tmax Tmax+0.4],[om om],'color','r')
@@ -279,7 +276,7 @@ end
 %%%%%% abcisses %% Volume specifique %%%%%%%%%%%
 line([Tmin 56],[-0.001 -0.001],'color','r')
 %valeurs affichees
-valeurs=[Vs_abs_min:0.01:Vs_ord_min];
+valeurs=[Vs_abs_min:0.01:Vs_max_ordonnees];
 
 for k=1:length(valeurs)
     temp=(valeurs(k)*Ptot*Mv-Mv*R*273.15/Mas)*Mas/(Mv*R);
@@ -289,7 +286,7 @@ end
 text(Tmax,-0.001,{'volume specifique','en m^3/kg'}, 'Color','red','Fontsize',fsz+2)
 
 % graduations
-valeurs_traits=[0.730:0.001:0.915];
+valeurs_traits=[vs_min_iso:0.001:vs_max_iso];
 for k=1:length(valeurs_traits)
     temp=(valeurs_traits(k)*Ptot*Mv-Mv*R*273.15/Mas)*Mas/(Mv*R);
     line([temp temp],[-0.001 -0.0015],'color','r')
@@ -307,7 +304,7 @@ for k=1:length(valeurs)
     str={valeurs(k)};
     text(Tmax+2.5,om,str,'FontSize',fsz, 'Color',[0 0.5 0.5],'rotation',0)
 end 
-text(Tmax+2,0.0601,{'pression partielle','en kg/cm^2'},'Fontsize',fsz+2,'rotation',90,'Color',[0 0.5 0.5])
+text(Tmax+2,0.0601,{'pression partielle','en kg/cm^2'},'Fontsize',fsz+2,'rotation',90,'Color',[0.5 0.5 0.5])
 
 %axe 
 line([Tmax+2 Tmax+2], ylim,'Color',[0 0.5 0.5]); 
@@ -333,18 +330,18 @@ str = {'\itAlice  BOUDET','Ruben BRUNETAUD'};
 text(Tmin+5,0.052,str, 'Fontsize', 2*fsz, 'Interpreter', 'Tex')
 
 
-%A enlever du mode commentaire pour sauvergarder l'image
-
-%         Here we preserve the size of the image when we save it.
-            set(gcf,'InvertHardcopy','on');
-            set(gcf,'PaperUnits', 'centimeters');
-            papersize = get(gcf, 'PaperSize');
-            left = (papersize(1)- width)/2;
-            bottom = (papersize(2)- height)/2;
-            myfiguresize = [left, bottom, width, height];
-            set(gcf,'PaperPosition', myfiguresize);
-        
-%         Save the file as PNG
-%         r300 correspond a la definition
-        print('Diagramme','-dpng','-r200');
+% %A enlever du mode commentaire pour sauvergarder l'image
+% 
+% %         Here we preserve the size of the image when we save it.
+%             set(gcf,'InvertHardcopy','on');
+%             set(gcf,'PaperUnits', 'centimeters');
+%             papersize = get(gcf, 'PaperSize');
+%             left = (papersize(1)- width)/2;
+%             bottom = (papersize(2)- height)/2;
+%             myfiguresize = [left, bottom, width, height];
+%             set(gcf,'PaperPosition', myfiguresize);
+%         
+% %         Save the file as PNG
+% %         r300 correspond a la definition
+%         print('Diagramme','-dpng','-r200');
 

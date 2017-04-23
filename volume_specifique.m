@@ -6,5 +6,4 @@ R=0.287042; % kJ/kg.K
 
 Vs = R*(T+273) .* ( omega./Mv .+ 1/Mas)./(eps.*Pvs); 
 
-
 end 

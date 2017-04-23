@@ -2,14 +2,14 @@ clc
 clear all 
 close all
 
-%% Définition des constantes et de la variable principale : la température
+%% D?finition des constantes et de la variable principale : la temp?rature
 
 % Constantes
 Ptot=101325; %Pa (Wikipedia)
 Cp_as = 1.005 % kJ/kg/K (the engineering toolbox)
 Cp_eau = 4.180   %kJ/kg/K (the engineering toolbox)
 Lv_eau = 2257.92 % kJ/kg (ThermExcel)
-R=8,3144621; %J/mol/K (Wikipedia)
+R=8.3144621; %J/mol/K (Wikipedia)
 Mas= 28.96546*10^-3 ; %kg/mol (Metgen)
 Mv= 18.01528*10^-3 ; %kg/mol (Wikipedia)
 
@@ -19,10 +19,10 @@ Tmax=50;
 Tmax_affiche=Tmax+4; %valeur de temperature pour l'affichage et non pas pour le calul (pour avoir de la marge pour tracer les axes secondaires)
 omega_maxaffich=0.06;
 
-T=[Tmin:0.01:Tmax]; % on travaille avec une précision au centième de degré
+T=[Tmin:0.01:Tmax]; % on travaille avec une precision au centieme de degre
 
 
-%% Tracé du diagramme psychrometrique
+%% Trac? du diagramme psychrometrique
 
 figure(1) %figure diagramme 
 hold 
@@ -45,7 +45,7 @@ set(gcf,'units','centimeters','position',[1,1,width,height])
 
 pos = get(gcf, 'Position');
 
-title('\fontsize{13}Abaque psychrométrique simplifiée')
+title('\fontsize{13} Abaque psychrometrique simplifiee')
 
 xlabel('T en {\circ}C')
 ylabel('omega en kg/kg')
@@ -61,11 +61,11 @@ axes.FontSize=8;
 abscisses=T(1:100:end);
 ordonnees=[0:0.001:omega_maxaffich];
 
-set(gca, 'FontSize', fsz, 'LineWidth', alw,'Box','off','XTick',abscisses,...
-    'YTick',ordonnees); %<- Choix propriétés, choix notamment des graduations abscisses/ordonnees
+set(gca, 'FontSize', fsz-2, 'LineWidth', alw,'Box','off','XTick',abscisses,...
+    'YTick',ordonnees); %<- Choix proprietes, choix notamment des graduations abscisses/ordonnees
 
     
-%% Tracé des iso-humidités relatives
+%% Trace des iso-humidites relatives
 
 Pvs=pression_vapPa(T);
 courbe_sat=0.621945.*(Pvs./(Ptot-Pvs));
@@ -74,7 +74,7 @@ for h=1:10
     plot(T, 0.1*h*courbe_sat, '-k','LineWidth',lw,'MarkerSize',msz)
 end 
 
-% Tracé des légendes au dessus d'une courbe sur deux
+% Traces des legendes au dessus d'une courbe sur deux
 Tlegende=2*Tmax/3; 
 Pvs_legende=pression_vapPa(Tlegende);
 courbe_sat_legende=0.621945.*(Pvs_legende./(Ptot-Pvs_legende));
@@ -149,10 +149,11 @@ for h=-4:0.5:60 %nombre de droites, intervalle d'enthalpies
             plot(T(k:markerstep:end), iso_h(k:markerstep:end),'.b','MarkerSize',0.5)  
 
             text(T(k),Ech_h(k),'-','FontSize',fsz,'Color','blue','rotation',-Angle_pente_H)
+            
             %idem, les bornes de h sont a recalculer
             if h>10 && h<49 && mod(h,1)==0
                 str={h};
-                text(T(k)-0.3,Ech_h(k),str,'FontSize',fsz,'Color','blue','rotation',Angle_pente_H)
+                text(T(k)-0.35,Ech_h(k),str,'FontSize',fsz,'Color','blue','rotation',Angle_pente_H)
                 if h==26 %26 pour etre au milieu de l'axe
                     text(T(k)+0.5,Ech_h(k)+0.002,'h en kcal/kg','FontSize',12,'Color','blue','rotation', Angle_pente_H)
                 end 
@@ -166,7 +167,7 @@ plot(T, Ech_h, '-b')
 
 
 
-%% Tracé des isovolumes specifiques
+%% Traces des isovolumes specifiques
 
 Vs_ord_min= ((Mv/Mas)) * (R*(Tmax+273.15)/(Ptot*Mv));  
 Vs_ord_max=((Mv/Mas)+omega_maxaffich) * (R*(Tmax+273.15)/(Ptot*Mv));
@@ -185,7 +186,7 @@ for vs=Vs_abs_min:0.01:Vs_ord_max
     
 end
 
-% Tracé de l'axe des ordonnées en volume spécifique
+% Trace de l'axe des ordonnees en volume sp?cifique
 
 line([Tmax Tmax],[0 omega_maxaffich],'color','r')   
 
@@ -204,7 +205,7 @@ for k=1:length(valeurs_traits)
     line([Tmax Tmax+0.4],[om om],'color','r')
 end 
 
-% Tracé de l'axe des abscisses en volume spécifique
+% Trac? de l'axe des abscisses en volume sp?cifique
 
 line([Tmin Tmax],[-0.001 -0.001],'color','r')
 
@@ -213,7 +214,7 @@ valeurs=[Vs_abs_min:0.01:Vs_ord_min];
 for k=1:length(valeurs)
     temp=(valeurs(k)*Ptot*Mv-Mv*R*273.15/Mas)*Mas/(Mv*R);
     str={valeurs(k)};
-    text(temp,-0.001,str,'FontSize',fsz,'Color','r')
+    text(temp,-0.001,str,'FontSize',fsz-2,'Color','r')
 end 
 text(Tmax,-0.001,{'volume specifique','en m^3/kg'}, 'Color','red','Fontsize',fsz+2)
 
@@ -225,7 +226,7 @@ for k=1:length(valeurs_traits)
 end 
 
 
-%% Tracé de la grille et des autres échelles 
+%% Trac? de la grille et des autres ?chelles 
 
 %on trace la grille facilitant la lecture de T et de omega sous la courbe de sat
 stem(T(1:100:end), courbe_sat(1:100:end), 'k','LineWidth',lw/4, 'Marker', '.') 
@@ -300,7 +301,7 @@ text(Tmin+5,0.052,str, 'Fontsize', 2*fsz, 'Interpreter', 'Tex')
 
 %% Sauvegarde de l'image au format png
 
-% les lignes suivantes permettent de préserver le format de l'image avant
+% les lignes suivantes permettent de pr?server le format de l'image avant
 % de la sauvegarder
             set(gcf,'InvertHardcopy','on');
             set(gcf,'PaperUnits', 'centimeters');
