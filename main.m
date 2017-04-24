@@ -9,7 +9,7 @@ Ptot=101325; %Pa (Wikipedia)
 Cp_as = 1.005 % kJ/kg/K (the engineering toolbox)
 Cp_eau = 4.180   %kJ/kg/K (the engineering toolbox)
 Lv_eau = 2257.92 % kJ/kg (ThermExcel)
-R=8,3144621; %J/mol/K (Wikipedia)
+R=8.3144621; %J/mol/K (Wikipedia)
 Mas= 28.96546*10^-3 ; %kg/mol (Metgen)
 Mv= 18.01528*10^-3 ; %kg/mol (Wikipedia)
 
@@ -45,7 +45,7 @@ set(gcf,'units','centimeters','position',[1,1,width,height])
 
 pos = get(gcf, 'Position');
 
-title('\fontsize{13}Abaque psychrom?trique simplifi?e')
+title('\fontsize{13}Abaque psychrometrique simplifiee')
 
 xlabel('T en {\circ}C')
 ylabel('omega en kg/kg')
@@ -71,7 +71,7 @@ Pvs=pression_vapPa(T);
 courbe_sat=0.621945.*(Pvs./(Ptot-Pvs));
 
 for h=1:10
-    plot(T, 0.1*h*courbe_sat, '-k','LineWidth',lw,'MarkerSize',msz)
+    plot(T, 0.1*h*courbe_sat, '-k','LineWidth',lw)
 end 
 
 % Trac? des l?gendes au dessus d'une courbe sur deux
@@ -168,9 +168,15 @@ plot(T, Ech_h, '-b')
 
 %% Trac? des isovolumes specifiques
 
+%Calcul precis
 Vs_ord_min= ((Mv/Mas)) * (R*(Tmax+273.15)/(Ptot*Mv));  
 Vs_ord_max=((Mv/Mas)+omega_maxaffich) * (R*(Tmax+273.15)/(Ptot*Mv));
 Vs_abs_min= ((Mv/Mas)) * (R*(Tmin+273.15)/(Ptot*Mv));
+
+%On les passe en valeurs avec 2 chiffres significatifs 
+Vs_ord_min=fix(1000*Vs_ord_min)/1000;
+Vs_ord_max=fix(1000*Vs_ord_max)/1000;
+Vs_abs_min=fix(1000*Vs_abs_min)/1000;
 
 for vs=Vs_abs_min:0.01:Vs_ord_max
     omega_vs=(vs.*Ptot.* Mv)./(R.*(T+273.15)) - (Mv/Mas); % source = Metgen
@@ -311,4 +317,4 @@ text(Tmin+5,0.052,str, 'Fontsize', 2*fsz, 'Interpreter', 'Tex')
 %             set(gcf,'PaperPosition', myfiguresize);
 %             
 %         print('Diagramme','-dpng','-r200'); % sauvegarde l'image au format png
-% 
+
