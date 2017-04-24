@@ -300,15 +300,15 @@ text(Tmin+5,0.052,str, 'Fontsize', 2*fsz, 'Interpreter', 'Tex')
 
 %% Sauvegarde de l'image au format png
 
-% les lignes suivantes permettent de pr?server le format de l'image avant
-% de la sauvegarder
-            set(gcf,'InvertHardcopy','on');
-            set(gcf,'PaperUnits', 'centimeters');
-            papersize = get(gcf, 'PaperSize');
-            left = (papersize(1)- width)/2;
-            bottom = (papersize(2)- height)/2;
-            myfiguresize = [left, bottom, width, height];
-            set(gcf,'PaperPosition', myfiguresize);
-            
-        print('Diagramme','-dpng','-r200'); % sauvegarde l'image au format png
-
+% % les lignes suivantes permettent de pr?server le format de l'image avant
+% % de la sauvegarder
+%             set(gcf,'InvertHardcopy','on');
+%             set(gcf,'PaperUnits', 'centimeters');
+%             papersize = get(gcf, 'PaperSize');
+%             left = (papersize(1)- width)/2;
+%             bottom = (papersize(2)- height)/2;
+%             myfiguresize = [left, bottom, width, height];
+%             set(gcf,'PaperPosition', myfiguresize);
+%             
+%         print('Diagramme','-dpng','-r200'); % sauvegarde l'image au format png
+% 
