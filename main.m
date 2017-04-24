@@ -16,8 +16,9 @@ Mv= 18.01528*10^-3 ; %kg/mol (Wikipedia)
 % Variables
 Tmin=-15;
 Tmax=50;
-Tmax_affiche=Tmax+4; %valeur de temperature pour l'affichage et non pas pour le calul (pour avoir de la marge pour tracer les axes secondaires)
 omega_maxaffich=0.06;
+
+Tmax_affiche=Tmax+4; %valeur de temperature pour l'affichage et non pas pour le calul (pour avoir de la marge pour tracer les axes secondaires)
 
 T=[Tmin:0.01:Tmax]; % on travaille avec une pr?cision au centi?me de degr?
 
